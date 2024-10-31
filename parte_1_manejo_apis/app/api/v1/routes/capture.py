@@ -1,6 +1,7 @@
 # app/api/v1/routes/capture.py
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from app.core.utils.constants import CAPTURE_POKEMON_POKEMON_NO_FOUND_404, CAPTURE_POKEMON_USER_NO_FOUND_404
 from app.db.session import get_session
 from app.models.capture import Capture
 from app.services.external_api import fetch_user, fetch_pokemon
@@ -11,11 +12,11 @@ router = APIRouter()
 async def capture_pokemon(username: str, pokemon_name: str, session: Session = Depends(get_session)):
     user = await fetch_user(username)
     if not user:
-        raise HTTPException(status_code=404, detail="La persona con ese usuario no exite verifique con el endpoint correspondiente")
+        raise HTTPException(status_code=404, detail= CAPTURE_POKEMON_USER_NO_FOUND_404)
 
     pokemon = await fetch_pokemon(pokemon_name)
     if not pokemon:
-        raise HTTPException(status_code=404, detail="El pokémon no existe verifique con el endpoint correspondiente")
+        raise HTTPException(status_code=404, detail= CAPTURE_POKEMON_POKEMON_NO_FOUND_404)
 
     new_capture = Capture(username=username, pokemon_name=pokemon["name"])
     session.add(new_capture)

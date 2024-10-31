@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from app.core.utils.constants import GET_POKEMON_POKEMON_NO_FOUND_404
+from app.schemas.pokemon import PokemonResponse
 from app.services.external_api import fetch_pokemon
 
 router = APIRouter()
 
-@router.get("/pokemon/{pokemon_name}")
+@router.get("/pokemon/{pokemon_name}", response_model= PokemonResponse)
 async def get_pokemon(pokemon_name: str):
     pokemon = await fetch_pokemon(pokemon_name)
     if not pokemon:

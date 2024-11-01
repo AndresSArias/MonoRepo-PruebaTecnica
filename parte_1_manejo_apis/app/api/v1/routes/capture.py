@@ -1,4 +1,3 @@
-# app/api/v1/routes/capture.py
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.core.utils.constants import CAPTURE_POKEMON_POKEMON_NO_FOUND_404, CAPTURE_POKEMON_USER_NO_FOUND_404, GET_CAPTURES_CAPTURES_NO_FOUND_404
@@ -8,6 +7,7 @@ from app.services.external_api import fetch_user, fetch_pokemon
 
 router = APIRouter()
 
+#Endpoint con el cual haremos una captura, antes validado la existencia de las dos partes, la persona mediante su usuario y el pokemon mediante su id de pokédex o nombre.
 @router.put("/capture/{username}/pokemon/{pokemon_name}")
 async def capture_pokemon(username: str, pokemon_name: str, session: Session = Depends(get_session)):
     user = await fetch_user(username)
@@ -24,7 +24,7 @@ async def capture_pokemon(username: str, pokemon_name: str, session: Session = D
     session.commit()
     return {"message": f"{user.name} capturó a un {pokemon.name}"}
 
-
+#Endpoint para mostrar las capturas realizadas.
 @router.get("/captures")
 async def get_captures(session: Session = Depends(get_session)):
     captures = session.query(Capture).all()

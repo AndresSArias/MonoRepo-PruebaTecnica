@@ -1,4 +1,3 @@
-# app/db/base.py
 from sqlmodel import SQLModel
 from app.models.capture import Capture  # Importa aquí todos los modelos que usen SQLModel
 
